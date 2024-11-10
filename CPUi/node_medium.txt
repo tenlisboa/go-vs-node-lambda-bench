@@ -1,0 +1,42 @@
+**CloudWatch Logs Insights**    
+region: us-east-2    
+log-group-names: /aws/lambda/benchNode-HelloWorldFunction512Mb-AXTCQ3tBFVS5    
+start-time: 2024-11-10T01:12:51.102Z    
+end-time: 2024-11-10T01:16:13.877Z    
+query-string:
+  ```
+    fields @type="REPORT"
+| fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldStart
+| stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldStart
+  ```
+---
+| coldStart | count | p50 | p90 | p99 | max |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 1639 | 1138.517 | 1166.158 | 1202.8564 | 1255.11 |
+| 1 | 10 | 1340.58 | 1371.28 | 1402.63 | 1402.63 |
+---
+
+Cost: 268.50 USD
+
+
+----- ARM
+
+**CloudWatch Logs Insights**    
+region: us-east-2    
+log-group-names: /aws/lambda/benchNode-HelloWorldFunction512Mb-AXTCQ3tBFVS5    
+start-time: 2024-11-10T01:48:29.775Z    
+end-time: 2024-11-10T01:49:37.367Z    
+query-string:
+  ```
+    fields @type="REPORT"
+| fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldStart
+| stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldStart
+  ```
+---
+| coldStart | count | p50 | p90 | p99 | max |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 242 | 788.62 | 810.56 | 836.13 | 836.13 |
+| 1 | 3 | 1013.18 | 1016.17 | 1016.17 | 1016.17 |
+---
+
+Cost: 151.73 USD

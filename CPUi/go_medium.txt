@@ -1,0 +1,19 @@
+**CloudWatch Logs Insights**    
+region: us-east-2    
+log-group-names: /aws/lambda/benchGo-GoPrimeNumber512Mb-rlFsCa9Ao6gy    
+start-time: 2024-11-10T01:36:54.836Z    
+end-time: 2024-11-10T01:38:36.224Z    
+query-string:
+  ```
+    fields @type="REPORT"
+| fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldStart
+| stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldStart
+  ```
+---
+| coldStart | count | p50 | p90 | p99 | max |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 1310 | 820.28 | 839.3554 | 868.3694 | 931.38 |
+| 1 | 10 | 893.08 | 961.19 | 962.03 | 962.03 |
+---
+
+Cost: 157.33 USD
