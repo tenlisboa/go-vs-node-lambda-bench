@@ -1,43 +1,55 @@
 package main
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/rand"
+	"encoding/hex"
 	"fmt"
-	"math"
+	"io"
+	"log"
+	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-// Função para verificar se um número é primo
-func isPrime(n int) bool {
-	if n <= 1 {
-		return false
+func encryptAES(key, text []byte) (string, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return "", err
 	}
-	for i := 2; i <= int(math.Sqrt(float64(n))); i++ {
-		if n%i == 0 {
-			return false
-		}
-	}
-	return true
-}
 
-// Função para calcular números primos até um limite
-func calculatePrimes(limit int) []int {
-	primes := []int{}
-	for i := 2; i <= limit; i++ {
-		if isPrime(i) {
-			primes = append(primes, i)
-		}
+	ciphertext := make([]byte, aes.BlockSize+len(text))
+	iv := ciphertext[:aes.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		return "", err
 	}
-	return primes
+
+	stream := cipher.NewCFBEncrypter(block, iv)
+	stream.XORKeyStream(ciphertext[aes.BlockSize:], text)
+
+	return hex.EncodeToString(ciphertext), nil
 }
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	limit := 1000000
-	primes := calculatePrimes(limit)
+	key := []byte("thisis32bitlongpassphraseimusing")
+	plaintext := []byte("Hello, AWS Lambda!")
+	encryptedResults := make([]string, 0)
 
+	start := time.Now()
+
+	for i := 0; i < 10000; i++ {
+		encrypted, err := encryptAES(key, plaintext)
+		if err != nil {
+			log.Fatal("Erro na criptografia:", err)
+		}
+		encryptedResults = append(encryptedResults, encrypted)
+	}
+
+	duration := time.Since(start)
 	return events.APIGatewayProxyResponse{
-		Body:       fmt.Sprintf("Números primos até %d: %d\n", limit, len(primes)),
+		Body:       fmt.Sprintf("O tempo de execução foi de: %s, resultados criptografados: %v", duration, len(encryptedResults)),
 		StatusCode: 200,
 	}, nil
 }

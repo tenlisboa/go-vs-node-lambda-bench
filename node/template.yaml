@@ -14,7 +14,7 @@ Resources:
       Handler: app.lambdaHandler
       Runtime: nodejs20.x
       Architectures:
-        - arm64
+        - x86_64
       Events:
         HelloWorld:
           Type: Api
@@ -37,7 +37,7 @@ Resources:
       Handler: app.lambdaHandler
       Runtime: nodejs20.x
       Architectures:
-        - arm64
+        - x86_64
       Events:
         HelloWorld:
           Type: Api
@@ -60,7 +60,7 @@ Resources:
       Handler: app.lambdaHandler
       Runtime: nodejs20.x
       Architectures:
-        - arm64
+        - x86_64
       Events:
         HelloWorld:
           Type: Api

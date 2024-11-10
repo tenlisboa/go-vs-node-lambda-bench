@@ -16,7 +16,7 @@ Resources:
       Runtime: provided.al2023
       MemorySize: 1024
       Architectures:
-        - arm64
+        - x86_64
       Events:
         CatchAll:
           Type: Api
@@ -33,7 +33,7 @@ Resources:
       Runtime: provided.al2023
       MemorySize: 512
       Architectures:
-        - arm64
+        - x86_64
       Events:
         CatchAll:
           Type: Api
@@ -50,7 +50,7 @@ Resources:
       Runtime: provided.al2023
       MemorySize: 256
       Architectures:
-        - arm64
+        - x86_64
       Events:
         CatchAll:
           Type: Api
