@@ -1,32 +1,17 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { setTimeout } from 'timers/promises';
 
-function isPrime(n: number) {
-    if (n <= 1) return false;
-    for (let i = 2; i <= Math.sqrt(n); i++) {
-        if (n % i === 0) return false;
-    }
-    return true;
+async function simulateServiceLatency(min: number, max: number): Promise<number> {
+    const latency = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    await setTimeout(latency);
+
+    return latency;
 }
-
-function calculatePrimes(limit: number) {
-    const primes = [];
-    for (let i = 2; i <= limit; i++) {
-        if (isPrime(i)) {
-            primes.push(i);
-        }
-    }
-    return primes;
-}
-export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const limit = 1000000;
-
-    const primes = calculatePrimes(limit);
-    console.log();
-
+export const lambdaHandler = async () => {
     const response = {
         statusCode: 200,
         body: JSON.stringify({
-            message: `Números primos até ${limit}: ${primes.length}`,
+            message: `O serviço demorou ${await simulateServiceLatency(600, 1000)} ms para responder`,
         }),
     };
 
