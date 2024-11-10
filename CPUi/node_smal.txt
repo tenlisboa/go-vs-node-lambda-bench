@@ -19,3 +19,26 @@ query-string:
 ---
 
 Cost: 126.15 USD
+
+
+------- x86
+
+**CloudWatch Logs Insights**    
+region: us-east-2    
+log-group-names: /aws/lambda/benchNode-HelloWorldFunction256Mb-f7HM2QuDV29C    
+start-time: 2024-11-10T03:01:44.530Z    
+end-time: 2024-11-10T03:03:22.979Z    
+query-string:
+  ```
+    fields @type="REPORT"
+| fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldStart
+| stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldStart
+  ```
+---
+| coldStart | count | p50 | p90 | p99 | max |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 1094 | 929.441 | 1013.88 | 1083.018 | 1113.67 |
+| 1 | 10 | 1710.18 | 1804.96 | 1809.35 | 1809.35 |
+---
+
+Cost: 123.85 USD

@@ -17,3 +17,26 @@ query-string:
 ---
 
 Cost: 23.92 USD
+
+
+---- x86
+
+**CloudWatch Logs Insights**    
+region: us-east-2    
+log-group-names: /aws/lambda/benchGo-GoPrimeNumber256Mb-xZZbspAQoNcH    
+start-time: 2024-11-10T03:01:58.571Z    
+end-time: 2024-11-10T03:03:41.428Z    
+query-string:
+  ```
+    fields @type="REPORT"
+| fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldStart
+| stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldStart
+  ```
+---
+| coldStart | count | p50 | p90 | p99 | max |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 3000 | 129.0978 | 150.2791 | 178.2895 | 196.12 |
+| 1 | 7 | 243.77 | 266.32 | 266.32 | 266.32 |
+---
+
+Cost: 24.75 USD
