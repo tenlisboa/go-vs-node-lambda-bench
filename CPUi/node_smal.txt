@@ -1,0 +1,21 @@
+----- ARM
+
+**CloudWatch Logs Insights**    
+region: us-east-2    
+log-group-names: /aws/lambda/benchNode-HelloWorldFunction256Mb-f7HM2QuDV29C    
+start-time: 2024-11-10T02:46:04.816Z    
+end-time: 2024-11-10T02:47:37.387Z    
+query-string:
+  ```
+    fields @type="REPORT"
+| fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldStart
+| stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldStart
+  ```
+---
+| coldStart | count | p50 | p90 | p99 | max |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 675 | 1144.221 | 1265.7611 | 1380.7546 | 1456.21 |
+| 1 | 10 | 2090.45 | 2191.2 | 2280.48 | 2280.48 |
+---
+
+Cost: 126.15 USD
